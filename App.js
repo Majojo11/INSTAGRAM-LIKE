@@ -1,11 +1,36 @@
 import { StyleSheet, Text, View, Image } from 'react-native';
 import { useFonts } from 'expo-font';
-
-// agregar iconos de like, comentario, compartir, seleccion de foto y guardar 
-// agregar vistas de la foto, descripcion, comentarios, hora de publicacion 
-//Agregar barra de navegacion con iconos de home, busqueda, reels, notificaciones y perfil
+import { Ionicons } from "@expo/vector-icons";
+import { TouchableOpacity } from "react-native";
+import { useState } from "react";
 
 export default function App() {
+
+  const [numberLikes, setNumberLikes] = useState(0);
+  const [likeColor, setLikeColor] = useState("black");
+  const [likeColor2, setSaveColor] = useState("black")
+  const [isSaved, setIsSaved] = useState(false);
+
+  const handleLike = () => {
+    if (numberLikes === 0) {
+      setNumberLikes(1);
+      setLikeColor("#e54848");
+    } else {
+      setNumberLikes(0);
+      setLikeColor("black");
+    }
+  };
+
+const handleSaveToggle = () => {
+  if (!isSaved) {
+    setSaveColor("black");
+    setIsSaved(true);
+  } else {
+    setSaveColor("black");
+    setIsSaved(false);
+  }
+};
+
   const [fontsLoaded] = useFonts({
     Insta: require('./assets/fonts/VeganStylePersonalUse-5Y58.ttf'),
   });
@@ -32,20 +57,29 @@ export default function App() {
       </View>
 
       <View style={styles.container3}>
-        <Image source={require('./assets/Images/like.png')} style={styles.icon}/>
+        <TouchableOpacity onPress={handleLike} style={styles.LikeContainer}>
+          <Ionicons name={numberLikes === 1 ? "heart" : "heart-outline"} size={28} color={likeColor}/>
+          <Text style={styles.NumberContainerLike}>
+            {numberLikes}
+          </Text>
+        </TouchableOpacity>
+
         <Image source={require('./assets/Images/comment.png')} style={styles.icon}/>
         <Image source={require('./assets/Images/share.png')} style={styles.icon}/>
-        <Image source={require('./assets/Images/save.png')} style={styles.iconLeft}/>
+
+        <TouchableOpacity onPress={handleSaveToggle} style={styles.SaveContainer}>
+          <Ionicons name={isSaved ? "bookmark" : "bookmark-outline"} size={28} color={likeColor2}/>
+        </TouchableOpacity>
       </View>
 
       <View style={styles.container4}>
         <Text style={styles.description}>17,280 views</Text>
         <Text style={styles.description}>Username instagram template #Template</Text>
         <Text style={styles.description}>View all 370 comments</Text>
-        <Text style={styles.description}>2 hours ago</Text>
+        <Text style={styles.description}>2 hours ago </Text>
       </View>
 
-        <View style={styles.divider}/>
+      <View style={styles.divider}/>
 
       <View style={styles.containerBarra}>
         <Image source={require('./assets/Images/home.png')} style={styles.iconBarra}/>
@@ -76,15 +110,15 @@ const styles = StyleSheet.create({
     lineHeight: 45,
   },
   container2: {
-    flexDirection: 'row', // Cambia la dirección a horizontal
+    flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 10,
-    paddingVertical: 10,
+    paddingVertical: 5,
     backgroundColor: '#fff',
   },
   user: {
-    width: 40,
-    height: 40,
+    width: 45,
+    height: 45,
     borderRadius: 20,
   },
   postImage: {
@@ -94,7 +128,7 @@ const styles = StyleSheet.create({
   },
   username: {
     marginLeft: 10,
-    fontWeight: 'bold',
+    fontWeight: 400,
     fontSize: 16,
   },
   options: {
@@ -116,14 +150,21 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     backgroundColor: '#fff',
   },
+  LikeContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  NumberContainerLike:{
+    marginLeft: 6, 
+    marginRight: 10,
+    fontWeight: 'bold' 
+  },
   icon: {
     width: 24,
     height: 24,
     marginRight: 15,
   },
-  iconLeft: {
-    width: 24,
-    height: 24,
+  SaveContainer: {
     marginLeft: 'auto',
   },
   container4: {
@@ -157,4 +198,3 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
   },
 });
-
